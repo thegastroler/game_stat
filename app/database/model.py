@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Date, Float, Integer
 
-from database import Base
+from . import Base
 
 
 class Statistics(Base):

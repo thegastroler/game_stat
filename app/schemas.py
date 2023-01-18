@@ -1,11 +1,11 @@
-from typing import Optional, TypeVar, Generic
-from pydantic import BaseModel, Field
-from pydantic.generics import GenericModel
+from datetime import date
+from typing import List, Optional, Union
 
-T = TypeVar('T')
+from pydantic import BaseModel
 
-class StatisticsScema(BaseModel):
-    date: str
+
+class StatisticsSchema(BaseModel):
+    date: Union[str, date]
     views: Optional[int] = None
     clicks: Optional[int] = None
     cost: Optional[float] = None
@@ -16,12 +16,11 @@ class StatisticsScema(BaseModel):
         orm_mode = True
 
 
-class RequestStatistics(BaseModel):
-    parameter: StatisticsScema = Field(...)
+class CreateStatistics(BaseModel):
+    body: List[StatisticsSchema]
 
 
-class Response(GenericModel, Generic[T]):
-    code: str
-    status: str
-    message: str
-    result: Optional[T]
+class GetStatistics(BaseModel):
+    date_from: str
+    date_to: str
+    order_by: Optional[str] = None
