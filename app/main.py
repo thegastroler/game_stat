@@ -19,10 +19,15 @@ def get_statistics(request: GetStatistics) -> List[Optional[StatisticsSchema]]:
     try:
         for i in (request.date_from, request.date_to):
             datetime.strptime(i, '%Y-%m-%d')
+        if not request.order_by in StatisticsSchema.__fields__:
+            raise AttributeError
     except ValueError:
         return JSONResponse(
             content={"message": f"Incorrect data format in {i}, \
                 should be YYYY-MM-DD"})
+    except AttributeError:
+        return JSONResponse(
+            content={"message": f"Incorrect order parameter"})
     return StatisticsStorage(Session).get_statistics(
         d_from=request.date_from,
         d_to=request.date_to,
@@ -37,8 +42,8 @@ def post_statistics(request: CreateStatistics) -> JSONResponse:
             datetime.strptime(i.date, '%Y-%m-%d')
     except ValueError:
         return JSONResponse(
-            content={"message": f"Incorrect data format in '{i.date}', \
-                should be YYYY-MM-DD"})
+            content={"message": f"Incorrect data format in '{i.date}', "\
+                f"should be YYYY-MM-DD"})
     code, message, result = StatisticsStorage(Session).create_statistics(
         data=request.body)
     return JSONResponse(

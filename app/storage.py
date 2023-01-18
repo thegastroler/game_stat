@@ -48,8 +48,8 @@ class StatisticsStorage:
                     'Statistics created successfully', data
             else:
                 return (status.HTTP_206_PARTIAL_CONTENT,
-                        f'Statistics for dates already exist: \
-                        {[str(i.date) for i in check]}', data)
+                        f'Statistics for dates already exist: '\
+                        f'{[str(i.date) for i in check]}', data)
 
     def delete_statistics(self) -> str:
         with self.session() as session:
